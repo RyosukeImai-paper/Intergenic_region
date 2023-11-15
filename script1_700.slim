@@ -1,0 +1,21 @@
+initialize() {
+ defineConstant("N", 10000); // pop size
+ defineConstant("L", 850000); // total chromosome length
+ defineConstant("L0", 7e2); // between genes
+ defineConstant("L1", 1e3); // gene length
+ initializeTreeSeq();
+ initializeMutationRate(1e-7);
+ initializeRecombinationRate(1e-8, L-1);
+ initializeMutationType("m1", 0.8, "e", (5/N)); 
+ initializeMutationType("m2", 0.2, "g", -(5/(10*N)), 1.0);
+ initializeGenomicElementType("g2", c(m1,m2), c(0.01,0.99));
+ for (start in seq(from=L0, to=L-(L0+L1), by=(L0+L1)))
+ initializeGenomicElement(g2, start, (start+L1)-1);
+}
+1 early() {
+sim.addSubpop("p1", N);
+community.rescheduleScriptBlock(s1, 10*N, 10*N);
+}
+s1 10 late() {sim.outputFixedMutations("./0624advdeltest1_7_nn.txt");
+sim.treeSeqOutput("./recipe0624advdel1_7_nn.trees");
+} 
